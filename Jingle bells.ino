@@ -29,16 +29,16 @@ void setup() {
 // MELODY and TIMING  =======================================
 //  melody[] is an array of notes, accompanied by beats[], 
 //  which sets each note's relative length (higher #, longer note) 
-int melody[] = {g,  E,  R,  C,   g,  g,  g,  g, E,  D, C, a, R, a, F, E, D, b, R, G, G, F, D, E, R, g, E, D, C, g, R, g, E, D, C, a, };
-int beats[]  = { 16, 16, 16,  8,  8,  16, 32, 16, 16, 16, 8, 8 }; 
+int melody[] = {g,  E,  D,  C,   g,  g,  g, g,  E,  D,  C,  a,  R,  a,  F,  E,  D,  b,  R,  G,  G,  F,  D, E,  R,   g,  E,  D,  C,  g,  R,  g,  E,  D,  C,  a,  a,  a,  F,  E,  D,  G,  G,  G,  G,  A,  G,  F,  D,  C,  G,  E,  E,  E,  E,  E,  E,  E,  G,  C,  D, E,  R,  F,  F,  F,  F, F,  E,  E,  E, E, E,  D,  D,  E,  D,  G,  E,  E,  E,  E,  E,  E,  E,  G,  C,  D, E,  R,  F,  F,  F,  F, F,  E,  E,  E, E, G,  G,  F,  D,  C};
+int beats[]  = {16, 16, 16, 16,  48, 8,  8, 16, 16, 16, 16, 48, 16, 16, 16, 16, 16, 48, 16, 16, 16, 16, 16, 48, 16, 16, 16, 16, 16, 48, 16, 16, 16, 16, 16, 48, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 32, 32, 16, 16, 32, 16, 16, 32, 16, 16, 24, 8, 48, 16, 16, 16, 24, 8, 16, 16, 16, 8, 8, 16, 16, 16, 16, 32, 32, 16, 16, 32, 16, 16, 32, 16, 16, 24, 8, 48, 16, 16, 16, 24, 8, 16, 16, 16, 8, 8, 16, 16, 16, 16, 64}; 
 int MAX_COUNT = sizeof(melody) / 2; // Melody length, for looping.
 
 // Set overall tempo
-long tempo = 10000;
+long tempo = 20000;
 // Set length of pause between notes
 int pause = 1000;
 // Loop variable to increase Rest length
-int rest_count = 100; //<-BLETCHEROUS HACK; See NOTES
+int rest_count = 60; //<-BLETCHEROUS HACK; See NOTES
 
 // Initialize core variables
 int tone_ = 0;
