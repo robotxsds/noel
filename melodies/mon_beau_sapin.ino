@@ -1,14 +1,14 @@
 #define  c     3830     // 261 Hz 
 #define  d     3400     // 294 Hz 
 #define  e     3038     // 329 Hz 
-#define  f     2703     // 370 Hz
+#define  h     2703     // 370 Hz
 #define  g     2550     // 392 Hz 
 #define  a     2272     // 440 Hz 
 #define  b     2028     // 493 Hz 
 #define  C     1912     // 523 Hz 
 #define  D     1703     // 587 Hz
 #define  E     1517     // 659 Hz
-#define  F     1433//1432// 698 Hz
+#define  H     1433//1432// 698 Hz
 #define  G     1275//1276// 784 Hz
 #define  A     1136      // 880 Hz
 #define  R     0
@@ -29,7 +29,7 @@ void setup() {
 // MELODY and TIMING  =======================================
 //  melody[] is an array of notes, accompanied by beats[], 
 //  which sets each note's relative length (higher #, longer note) 
-int melody[] = {R,  R,  d,  g,  g, g,  a,  b,  b, b,  b, a, b, C,  f,  a,  g,  R, D, D,  b, E,  D, D,  C, C,  C, C,  a, D,  C, C,  b, b,  d,  g,  g, g,  a,  b,  b, b,  b, a, b, C,  f,  a,  g,  R};
+int melody[] = {R,  R,  d,  g,  g, g,  a,  b,  b, b,  b, a, b, C,  h,  a,  g,  R, D, D,  b, E,  D, D,  C, C,  C, C,  a, D,  C, C,  b, b,  d,  g,  g, g,  a,  b,  b, b,  b, a, b, C,  h,  a,  g,  R};
 int beats[]  = {16, 16, 16, 12, 4, 16, 16, 12, 4, 24, 8, 8, 8, 16, 16, 16, 16, 8, 8, 12, 4, 24, 8, 12, 4, 24, 8, 12, 4, 24, 8, 12, 4, 16, 16, 12, 4, 16, 16, 12, 4, 24, 8, 8, 8, 16, 16, 16, 16, 16}; 
 int MAX_COUNT = sizeof(melody) / 2; // Melody length, for looping.
 
