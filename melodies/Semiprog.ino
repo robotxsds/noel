@@ -16,11 +16,16 @@
 
 // SETUP ============================================
 // Set up speaker on a PWM pin (digital 9, 10 or 11)
-int speakerOut = 9;
+const int speakerOut = 9;
+const int bo1 = 2;
+const int bo2 = 3;
 // Do we want debugging on serial out? 1 for yes, 0 for no
 int DEBUG = 1;
 
 void setup() { 
+  pinMode(bo1, INPUT);
+  pinMode(bo2, INPUT);
+  
   pinMode(speakerOut, OUTPUT);
   if (DEBUG) { 
     Serial.begin(9600); // Set serial out if we want debugging
@@ -30,25 +35,32 @@ void setup() {
 // MELODY and TIMING  =======================================
 //  melody[] is an array of notes, accompanied by beats[], 
 //  which sets each note's relative length (higher #, longer note) 
-int melody[] = {g,  E,  D,  C,   g,  g,  g, g,  E,  D,  C,  a,  R,  a,  F,  E,  D,  b,  R,  G,  G,  F,  D, E,  R,   g,  E,  D,  C,  g,  R,  g,  E,  D,  C,  a,  a,  a,  F,  E,  D,  G,  G,  G,  G,  A,  G,  F,  D,  C,  G,  E,  E,  E,  E,  E,  E,  E,  G,  C,  D, E,  R,  F,  F,  F,  F, F,  E,  E,  E, E, E,  D,  D,  E,  D,  G,  E,  E,  E,  E,  E,  E,  E,  G,  C,  D, E,  R,  F,  F,  F,  F, F,  E,  E,  E, E, G,  G,  F,  D,  C};
-int beats[]  = {16, 16, 16, 16,  48, 8,  8, 16, 16, 16, 16, 48, 16, 16, 16, 16, 16, 48, 16, 16, 16, 16, 16, 48, 16, 16, 16, 16, 16, 48, 16, 16, 16, 16, 16, 48, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 32, 32, 16, 16, 32, 16, 16, 32, 16, 16, 24, 8, 48, 16, 16, 16, 24, 8, 16, 16, 16, 8, 8, 16, 16, 16, 16, 32, 32, 16, 16, 32, 16, 16, 32, 16, 16, 24, 8, 48, 16, 16, 16, 24, 8, 16, 16, 16, 8, 8, 16, 16, 16, 16, 64}; 
-int MAX_COUNT = sizeof(melody) / 2; // Melody length, for looping.
+int melody1[] = {g};
+int melody2[] = {R};
+
+int beats1[]  = {16}; 
+int beats2[]  = {16};
+
+int MAX_COUNT1 = sizeof(melody1) / 2; // Melody length, for looping.
+int MAX_COUNT2 = sizeof(melody2) / 2; // Melody length, for looping.
 
 // Set overall tempo
-long tempo = 20000;
+long tempo1 = 20000;
+long tempo2 = 20000;
 // Set length of pause between notes
 int pause = 1000;
 // Loop variable to increase Rest length
-int rest_count = 60; //<-BLETCHEROUS HACK; See NOTES
+int rest_count1 = 60; //<-BLETCHEROUS HACK; See NOTES
+int rest_count2 = 30;
 
-// Initialize core variables
+
 int tone_ = 0;
 int beat = 0;
 long duration  = 0;
 
 // PLAY TONE  ==============================================
 // Pulse the speaker to play a tone for a particular duration
-void playTone() {
+void playTone1() {
   long elapsed_time = 0;
   if (tone_ > 0) { // if this isn't a Rest beat, while the tone has 
     //  played less long than 'duration', pulse speaker HIGH and LOW
@@ -66,22 +78,20 @@ void playTone() {
     } 
   }
   else { // Rest beat; loop times delay
-    for (int j = 0; j < rest_count; j++) { // See NOTE on rest_count
+    for (int j = 0; j < rest_count1; j++) { // See NOTE on rest_count
       delayMicroseconds(duration);  
     }                                
   }                                 
 }
 
-// LET THE WILD RUMPUS BEGIN =============================
-void loop() {
-  // Set up a counter to pull from melody[] and beats[]
-  for (int i=0; i<MAX_COUNT; i++) {
-    tone_ = melody[i];
-    beat = beats[i];
+void jgb() {
+  for (int i=0; i<MAX_COUNT1; i++) {
+    tone_ = melody1[i];
+    beat = beats1[i];
 
-    duration = beat * tempo; // Set up timing
+    duration = beat * tempo1; // Set up timing
 
-    playTone(); 
+    playTone1(); 
     // A pause between notes...
     delayMicroseconds(pause);
 
@@ -97,59 +107,7 @@ void loop() {
   }
 }
 
-/*
- * NOTES
- * The program purports to hold a tone for 'duration' microseconds.
- *  Lies lies lies! It holds for at least 'duration' microseconds, _plus_
- *  any overhead created by incremeting elapsed_time (could be in excess of 
- *  3K microseconds) _plus_ overhead of looping and two digitalWrites()
- *  
- * As a result, a tone of 'duration' plays much more slowly than a rest
- *  of 'duration.' rest_count creates a loop variable to bring 'rest' beats 
- *  in line with 'tone' beats of the same length. 
- * 
- * rest_count will be affected by chip architecture and speed, as well as 
- *  overhead from any program mods. Past behavior is no guarantee of future 
- *  performance. Your mileage may vary. Light fuse and get away.
- *  
- * This could use a number of enhancements:
- * ADD code to let the programmer specify how many times the melody should
- *     loop before stopping
- * ADD another octave
- * MOVE tempo, pause, and rest_count to #define statements
- * RE-WRITE to include volume, using analogWrite, as with the second program at
- *          http://www.arduino.cc/en/Tutorial/PlayMelody
- * ADD code to make the tempo settable by pot or other input device
- * ADD code to take tempo or volume settable by serial communication 
- *          (Requires 0005 or higher.)
- * ADD code to create a tone offset (higer or lower) through pot etc
- * REPLACE random melody with opening bars to 'Smoke on the Water'
- */
-
-
-
-// MELODY and TIMING  =======================================
-//  melody[] is an array of notes, accompanied by beats[], 
-//  which sets each note's relative length (higher #, longer note) 
-int melody2[] = {R,  R,  d,  g,  g, g,  a,  b,  b, b,  b, a, b, C,  h,  a,  g,  R, D, D,  b, E,  D, D,  C, C,  C, C,  a, D,  C, C,  b, b,  d,  g,  g, g,  a,  b,  b, b,  b, a, b, C,  h,  a,  g,  R};
-int beats[]  = {16, 16, 16, 12, 4, 16, 16, 12, 4, 24, 8, 8, 8, 16, 16, 16, 16, 8, 8, 12, 4, 24, 8, 12, 4, 24, 8, 12, 4, 24, 8, 12, 4, 16, 16, 12, 4, 16, 16, 12, 4, 24, 8, 8, 8, 16, 16, 16, 16, 16}; 
-int MAX_COUNT = sizeof(melody2) / 2; // Melody length, for looping.
-
-// Set overall tempo
-long tempo2 = 55000;
-// Set length of pause between notes
-int pause2 = 1000;
-// Loop variable to increase Rest length
-int rest_count2 = 30; //<-BLETCHEROUS HACK; See NOTES
-
-// Initialize core variables
-int tone_ = 0;
-int beat = 0;
-long duration  = 0;
-
-// PLAY TONE  ==============================================
-// Pulse the speaker to play a tone for a particular duration
-void playTone() {
+void playTone2() {
   long elapsed_time = 0;
   if (tone_ > 0) { // if this isn't a Rest beat, while the tone has 
     //  played less long than 'duration', pulse speaker HIGH and LOW
@@ -167,22 +125,20 @@ void playTone() {
     } 
   }
   else { // Rest beat; loop times delay
-    for (int j = 0; j < rest_count; j++) { // See NOTE on rest_count
+    for (int j = 0; j < rest_count2; j++) { // See NOTE on rest_count
       delayMicroseconds(duration);  
     }                                
   }                                 
 }
 
-// LET THE WILD RUMPUS BEGIN =============================
-void loop() {
-  // Set up a counter to pull from melody[] and beats[]
-  for (int i=0; i<MAX_COUNT; i++) {
-    tone_ = melody[i];
-    beat = beats[i];
+void oct() {
+  for (int i=0; i<MAX_COUNT2; i++) {
+    tone_ = melody2[i];
+    beat = beats2[i];
 
-    duration = beat * tempo; // Set up timing
+    duration = beat * tempo2; // Set up timing
 
-    playTone(); 
+    playTone2(); 
     // A pause between notes...
     delayMicroseconds(pause);
 
@@ -197,32 +153,23 @@ void loop() {
     }
   }
 }
+// LET THE WILD RUMPUS BEGIN =============================
+void loop() {
+  etatbo1 = digitalRead(bo1);
+  etatbo2 = digitalRead(bo2);
 
-/*
- * NOTES
- * The program purports to hold a tone for 'duration' microseconds.
- *  Lies lies lies! It holds for at least 'duration' microseconds, _plus_
- *  any overhead created by incremeting elapsed_time (could be in excess of 
- *  3K microseconds) _plus_ overhead of looping and two digitalWrites()
- *  
- * As a result, a tone of 'duration' plays much more slowly than a rest
- *  of 'duration.' rest_count creates a loop variable to bring 'rest' beats 
- *  in line with 'tone' beats of the same length. 
- * 
- * rest_count will be affected by chip architecture and speed, as well as 
- *  overhead from any program mods. Past behavior is no guarantee of future 
- *  performance. Your mileage may vary. Light fuse and get away.
- *  
- * This could use a number of enhancements:
- * ADD code to let the programmer specify how many times the melody should
- *     loop before stopping
- * ADD another octave
- * MOVE tempo, pause, and rest_count to #define statements
- * RE-WRITE to include volume, using analogWrite, as with the second program at
- *          http://www.arduino.cc/en/Tutorial/PlayMelody
- * ADD code to make the tempo settable by pot or other input device
- * ADD code to take tempo or volume settable by serial communication 
- *          (Requires 0005 or higher.)
- * ADD code to create a tone offset (higer or lower) through pot etc
- * REPLACE random melody with opening bars to 'Smoke on the Water'
- */
+  if (etatbo1 == HIGH) {
+  jgb();
+}
+
+  else if (etatbo2 == HIGH) {
+  oct();
+}
+
+  else {
+    
+  }
+// Set up a counter to pull from melody[] and beats[]
+  
+}
+
