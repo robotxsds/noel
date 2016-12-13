@@ -18,9 +18,11 @@
 // Set up speaker on a PWM pin (digital 9, 10 or 11)
 const int speakerOut = 9;
 const int bo1 = 2;
-const int bo2 = 3;
+const int bo2 = 4;
 // Do we want debugging on serial out? 1 for yes, 0 for no
 int DEBUG = 1;
+int etatbo1;
+int etatbo2;
 
 void setup() { 
   pinMode(bo1, INPUT);
@@ -157,19 +159,25 @@ void oct() {
 void loop() {
   etatbo1 = digitalRead(bo1);
   etatbo2 = digitalRead(bo2);
-
-  if (etatbo1 == HIGH) {
-  jgb();
+  
+  read();//go to void read()
+}
+void read() {
+  
+  if (etatbo1 == LOW && etatbo2 == HIGH) {//if etatbo1 is low and etatbo2 is high, ...
+  jgb();//go to jgb() (jingle bells)
 }
 
-  else if (etatbo2 == HIGH) {
+  else if (etatbo1 == HIGH && etatbo2 == LOW) {
   oct();
 }
 
   else {
-    
+    loop();
   }
+}
+
 // Set up a counter to pull from melody[] and beats[]
   
-}
+
 
