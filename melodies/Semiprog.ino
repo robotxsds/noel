@@ -14,11 +14,13 @@
 #define  A     1136      // 880 Hz
 #define  R     0
 
+
 // SETUP ============================================
-// Set up speaker on a PWM pin (digital 9, 10 or 11)
-const int speakerOut = 9;
-const int bo1 = 2;
-const int bo2 = 4;
+// Initialiser le haut-parleur sur les ports 6, 10 ou 11
+const int speakerOut = 9; // Le haut-parleur se branche sur le port 9
+const int bo1 = 2;        // Le bouton 1 se branche dans le port 2
+const int bo2 = 4;        // Le bouton 2 se branche dans le port 4
+
 // Do we want debugging on serial out? 1 for yes, 0 for no
 int DEBUG = 1;
 int etatbo1;
